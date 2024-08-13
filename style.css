@@ -1,0 +1,22 @@
+.block {
+    cursor: pointer;
+    color: red;
+    min-width: 300px;
+}
+
+.block .card-header {
+    background-color: #333;
+}
+
+.block .hash {
+    color: red;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.block.active {
+    border: 1px solid blue;
+    box-shadow: 0 0px 15px 0.5px #ccc;
+}

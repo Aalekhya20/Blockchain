@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Blockchain Frontend</title>
+</head>
+<body>
+    <h1>Blockchain Explorer</h1>
+
+    <!-- Display the entire blockchain -->
+    <button onclick="getBlockchain()">View Blockchain</button>
+    <pre id="blockchain"></pre>
+
+    <!-- Form to create a transaction -->
+    <h2>Create a Transaction</h2>
+    <form id="transactionForm" onsubmit="createTransaction(event)">
+        <label for="sender">Sender:</label>
+        <input type="text" id="sender" name="sender" required><br><br>
+        <label for="recipient">Recipient:</label>
+        <input type="text" id="recipient" name="recipient" required><br><br>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required><br><br>
+        <button type="submit">Send Transaction</button>
+    </form>
+
+    <h3>Response:</h3>
+    <pre id="response"></pre>
+
+    <script>
+        // Function to fetch and display the blockchain
+        function getBlockchain() {
+            fetch('http://localhost:3001/blockchain')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('blockchain').textContent = JSON.stringify(data, null, 2);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Function to create a new transaction
+        function createTransaction(event) {
+            event.preventDefault();
+            const sender = document.getElementById('sender').value;
+            const recipient = document.getElementById('recipient').value;
+            const amount = document.getElementById('amount').value;
+
+            fetch('http://localhost:3001/transaction/broadcast', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ sender, recipient, amount }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('transactionForm').reset(); // Clear the form
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
